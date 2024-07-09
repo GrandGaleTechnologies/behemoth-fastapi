@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "donjayamanne.python-environment-manager",
+        "ms-python.python",
+        "njpwerner.autodocstring"
+    ]
+}
