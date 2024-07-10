@@ -8,7 +8,7 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.orm import Session
 
 from app.core.dependencies import get_session
-
+from app.author.apis import router as author_router
 
 # Lifespan (startup, shutdown)
 @asynccontextmanager
@@ -56,7 +56,11 @@ app.add_middleware(
 
 
 # Healthcheck
-@app.get("/health")
+@app.get("/health", include_in_schema=False)
 async def health(_: Session = Depends(get_session)):
     """App Healthcheck"""
     return {"status": "Ok!"}
+
+
+# Routers
+app.include_router(author_router, prefix="/author", tags=["Author APIs"])
