@@ -7,8 +7,9 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.orm import Session
 
-from app.core.dependencies import get_session
 from app.author.apis import router as author_router
+from app.common.dependencies import get_session
+
 
 # Lifespan (startup, shutdown)
 @asynccontextmanager
