@@ -1,7 +1,7 @@
 from app.author import models
 
 
-async def format_author(author: models.Author):
+async def format_author(*, author: models.Author):
     """
     This function formats an author obj
     """
