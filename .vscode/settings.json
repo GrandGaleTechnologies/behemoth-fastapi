@@ -1,4 +1,7 @@
 {
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff"
+    },
     "python.testing.pytestArgs": [
         "."
     ],
