@@ -10,10 +10,10 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
     # App
-    DEBUG: bool = os.environ.get("DEBUG")
+    DEBUG: bool = os.environ.get("DEBUG")  # type: ignore
 
     # DB Settings
-    POSTGRES_DATABASE_URL: str = os.environ.get("POSTGRES_DATABASE_URL")
+    POSTGRES_DATABASE_URL: str = os.environ.get("POSTGRES_DATABASE_URL")  # type: ignore
 
 
 @lru_cache

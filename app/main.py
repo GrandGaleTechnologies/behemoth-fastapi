@@ -2,6 +2,7 @@ from contextlib import asynccontextmanager
 
 from anyio import to_thread
 from fastapi import Depends, FastAPI
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import ORJSONResponse
@@ -9,6 +10,12 @@ from sqlalchemy.orm import Session
 
 from app.author.apis import router as author_router
 from app.common.dependencies import get_session
+from app.common.exceptions import NotFound
+from app.core.handlers import (
+    base_exception_handler,
+    not_found_exception_handler,
+    request_validation_exception_handler,
+)
 
 
 # Lifespan (startup, shutdown)
@@ -54,6 +61,12 @@ app.add_middleware(
     GZipMiddleware,
     minimum_size=5000,  # Minimum size of the response before it is compressed in bytes
 )
+
+
+# Exception Handlers
+app.add_exception_handler(Exception, base_exception_handler)
+app.add_exception_handler(RequestValidationError, request_validation_exception_handler)  # type: ignore
+app.add_exception_handler(NotFound, not_found_exception_handler)  # type: ignore
 
 
 # Healthcheck
