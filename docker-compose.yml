@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  behemoth_fastapi:
+    build: .
+    command: bash -c 'while !</dev/tcp/behemoth_db/5432; do sleep 1; done; alembic upgrade head; uvicorn app.main:app --host 0.0.0.0 --port 8000'
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    environment:
+      - DEBUG=true
+      - POSTGRES_DATABASE_URL=postgresql://behemoth:backend@behemoth_db:5432/behemoth_db
+    depends_on:
+      - behemoth_db
+    networks:
+      - behemoth_network
+
+  behemoth_db:
+    image: postgres:15-alpine
+    volumes:
+      - behemoth_volume:/var/lib/postgresql/data
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=behemoth
+      - POSTGRES_PASSWORD=backend
+      - POSTGRES_DB=behemoth_db
+    networks:
+      - behemoth_network
+
+volumes:
+  behemoth_volume:
+
+
+networks:
+  behemoth_network:
