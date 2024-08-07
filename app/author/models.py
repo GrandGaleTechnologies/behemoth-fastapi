@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy.orm import Mapped, relationship
 
 from app.core.database import DBBase
 
@@ -30,3 +31,5 @@ class Book(DBBase):
     )
     name = Column(String(150), unique=True, nullable=False)
     created_at = Column(DateTime(timezone=True), default=datetime.now, nullable=False)
+
+    author: Mapped[Author] = relationship("Author", backref="books")
