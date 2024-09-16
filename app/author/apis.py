@@ -4,8 +4,11 @@ from app.author import selectors, services
 from app.author.formatters import format_author, format_book
 from app.author.schemas import create, response
 from app.common.annotations import DatabaseSession
+from app.core.tags import RouteTags
 
+# Globals
 router = APIRouter()
+tags = RouteTags()
 
 
 @router.post(
@@ -31,6 +34,7 @@ async def author_create(author_in: create.AuthorCreate, db: DatabaseSession):
     response_description="The created book's details",
     status_code=status.HTTP_201_CREATED,
     response_model=response.BookResponse,
+    tags=[tags.BOOK],
 )
 async def book_create(author_id: int, book_in: create.BookCreate, db: DatabaseSession):
     """

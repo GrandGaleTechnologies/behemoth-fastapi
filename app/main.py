@@ -10,12 +10,22 @@ from sqlalchemy.orm import Session
 
 from app.author.apis import router as author_router
 from app.common.dependencies import get_session
-from app.common.exceptions import NotFound
+from app.common.exceptions import (
+    BadGatewayError,
+    CustomHTTPException,
+    InternalServerError,
+)
 from app.core.handlers import (
+    bad_gateway_error_exception_handler,
     base_exception_handler,
-    not_found_exception_handler,
+    custom_http_exception_handler,
+    internal_server_error_exception_handler,
     request_validation_exception_handler,
 )
+from app.core.tags import RouteTags
+
+# Globals
+tags = RouteTags()
 
 
 # Lifespan (startup, shutdown)
@@ -66,7 +76,9 @@ app.add_middleware(
 # Exception Handlers
 app.add_exception_handler(Exception, base_exception_handler)
 app.add_exception_handler(RequestValidationError, request_validation_exception_handler)  # type: ignore
-app.add_exception_handler(NotFound, not_found_exception_handler)  # type: ignore
+app.add_exception_handler(InternalServerError, internal_server_error_exception_handler)  # type: ignore
+app.add_exception_handler(BadGatewayError, bad_gateway_error_exception_handler)  # type: ignore
+app.add_exception_handler(CustomHTTPException, custom_http_exception_handler)  # type: ignore
 
 
 # Healthcheck
@@ -77,4 +89,4 @@ async def health(_: Session = Depends(get_session)):
 
 
 # Routers
-app.include_router(author_router, prefix="/author", tags=["Author APIs"])
+app.include_router(author_router, prefix="/author", tags=[tags.AUTHOR])

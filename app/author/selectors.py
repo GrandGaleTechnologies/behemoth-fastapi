@@ -1,10 +1,11 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.author.crud import AuthorCRUD
-from app.common.exceptions import NotFound
+from app.author.exceptions import AuthorNotFound
 
 
-async def get_author_by_id(*, id: int, db: Session, raise_exception: bool = True):
+# pylint: disable=redefined-builtin
+async def get_author_by_id(*, id: int, db: AsyncSession, raise_exc: bool = True):
     """
     Get author using their ID
 
@@ -27,7 +28,7 @@ async def get_author_by_id(*, id: int, db: Session, raise_exception: bool = True
     obj = await author_crud.get(id=id)
 
     # Check obj
-    if not obj and raise_exception:
-        raise NotFound(msg="Author not found")
+    if not obj and raise_exc:
+        raise AuthorNotFound()
 
     return obj

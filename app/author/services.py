@@ -1,17 +1,17 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.author import models
 from app.author.crud import AuthorCRUD, BookCRUD
-
 from app.author.schemas import create
 
 
-async def create_author(*, data: create.AuthorCreate, db: Session):
+async def create_author(*, data: create.AuthorCreate, db: AsyncSession):
     """
     Create Author obj
 
     Args:
         data (create.AuthorCreate): The author's details
-        db (Session): The database session
+        db (AsyncSession): The database session
 
     Returns:
         models.Author
@@ -25,14 +25,14 @@ async def create_author(*, data: create.AuthorCreate, db: Session):
     return author
 
 
-async def create_book(author: models.Author, data: create.BookCreate, db: Session):
+async def create_book(author: models.Author, data: create.BookCreate, db: AsyncSession):
     """
     Create Book obj
 
     Args:
         author (models.Author): The book's author
         data (create.BookCreate): The book's details
-        db (Session): The database session
+        db (AsyncSession): The database session
 
     Returns:
         models.Book
