@@ -8,8 +8,8 @@ A powerful, scalable template to kickstart your backend projects. Includes FastA
   - [📑 Table of Contents](#-table-of-contents)
   - [✨ Features](#-features)
   - [📁 Project Structure](#-project-structure)
-  - [Getting Started](#getting-started)
-  - [Deploy](#deploy)
+  - [💡 Getting Started](#-getting-started)
+  - [🚀 Deploy](#-deploy)
   - [🤝 Contribute to the Project](#-contribute-to-the-project)
   - [📬 Contact](#-contact)
 
@@ -124,7 +124,7 @@ start.sh
 ```
 
 
-## Getting Started
+## 💡 Getting Started
 
 1. Setup Virtual Environment (If you are not using docker)
    ```shell
@@ -174,7 +174,7 @@ start.sh
 6. Test the application by making requests to endpoints.
    
 
-## Deploy
+## 🚀 Deploy
 YOU CAN DIRECTLY DEPLOY YOUR OWN VERSION USING THE LINK BELOW
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/CtmI_O?referralCode=e77QIa)
 
