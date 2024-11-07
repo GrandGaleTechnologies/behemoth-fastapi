@@ -53,8 +53,9 @@ A powerful, scalable template to kickstart your backend projects. Includes FastA
   
   - **external/**: Entry point and external dependencies.
     - **main.py:**: Main application entry point.
-  
-**tests.py/** Houses all application tests.
+ 
+**tests.py/:** Houses all application tests.
+
 **env_sample.txt:** Sample environment variables.
 **.flake8:** Contains the configurations for flake8.
 **.gitignore:** Specifies which folders/files to not push to github.
@@ -62,11 +63,11 @@ A powerful, scalable template to kickstart your backend projects. Includes FastA
 **alembic.ini:** Contains all the configurations for .
 **docker-compose.yml:** Docker configurations for containerized setup.
 **Dockerfile:** Instructions to build docker image.
-**LICENSE:** License details
+**LICENSE:** License details.
 **pytest.ini:** Where all the pytest configurations will be kept.
 **railway.toml:** Contains all the railway configurations.
 **requirements.txt:** Lists all application dependencies.
-**start.sh:** Application start up processes
+**start.sh:** Application start up processes.
 
 
 ## 📁 Project Structure
@@ -130,7 +131,7 @@ start.sh
 
 
 ## 💡 Getting Started
-
+<br/>
 1. Set up Virtual Environment (if you are not using Docker)
 
    ```shell
@@ -140,9 +141,8 @@ start.sh
    ```
 
 </br>
-
 2. Install Dependencies:
-  Local install
+   Local install
 
   ```shell
   $ pip install -r requirements.txt
@@ -155,34 +155,34 @@ start.sh
   ```
 </br>
 
+
 3. Create a `.env` file and add environment variables (use .env_sample as a guide).
 </br>
 
 4. Initialize Database Tables
+   
   ```shell
   alembic upgrade head
   ```
 
 </br>
-
 5. Start the Application
   Development Mode
   ```shell
   uvicorn app.main:app --reload
-  ``
+  ```
 
   Production Mode
   ```shell
   fastapi run
   ```
-
 </br>
 
 6. Test the application by making requests to the endpoints.
 
    
 ## 🎗 License
-This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
 ## 🚀 Deploy
