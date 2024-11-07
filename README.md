@@ -30,7 +30,6 @@ A powerful, scalable template to kickstart your backend projects. Includes FastA
     - **models.py:** Defines database models
     - **selectors.py:** Handles data retrieval operations..
     - **services.py:** Manages data modification operations (POST, PUT, DELETE).
-    - 
   - **common/**: Contains shared utilities and general functionalities. 
     - **annotations.py:**  Stores custom type annotations.
     - **auth.py:** Manages authentication.
@@ -49,18 +48,31 @@ A powerful, scalable template to kickstart your backend projects. Includes FastA
     - **tags.py:** Route tags.
   - **external/**: Entry point and external dependencies.
     - **main.py:**: Main application entry point.
+  
 **tests.py/** Houses all application tests.
+
 **env_sample.txt:** Sample environment variables.
-**.flake8:** Contains the configurations for flake8
-**.gitignore:** Specifies which folders/files to not push to github
-**.pylintrc:** Contains the configurations for pylint
-**alembic.ini:** Contains all the configurations for alembic
+
+**.flake8:** Contains the configurations for flake8.
+
+**.gitignore:** Specifies which folders/files to not push to github.
+
+**.pylintrc:** Contains the configurations for pylint.
+
+**alembic.ini:** Contains all the configurations for .
+
 **docker-compose.yml:** Docker configurations for containerized setup.
+
 **Dockerfile:** Instructions to build docker image.
+
 **LICENSE:** This project is licensed under the [MIT License](LICENSE) - see the LICENSE file for details.
-**pytest.ini:** Where all the pytest configurations will be kept
-**railway.toml:** Contains all the railway configurations
+
+**pytest.ini:** Where all the pytest configurations will be kept.
+
+**railway.toml:** Contains all the railway configurations.
+
 **requirements.txt:** Lists all application dependencies.
+
 **start.sh:** Application start up processes
 
 
@@ -134,8 +146,8 @@ start.sh
    ```
    NOTE: If you are using you can use create environment and it will be created and selected as workspace
 
-</br>
-1. Install dependencies:
+
+2. Install dependencies:
    Locally
 
    ```shell
@@ -149,15 +161,15 @@ start.sh
    ```
 </br>
 
-1. Create a `.env` file and input environment variables.
-</br>
+3. Create a `.env` file and input environment variables.
 
-1. Initialize database tables:
+
+4. Initialize database tables:
    ```
    alembic upgrade head
    ```
 
-</br>
+
 
 5. Start the application in development mode:
    ```
@@ -169,7 +181,7 @@ start.sh
   ```
   fastapi run
   ```
-</br>
+
 
 6. Test the application by making requests to endpoints.
    
