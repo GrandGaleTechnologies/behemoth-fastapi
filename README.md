@@ -57,16 +57,27 @@ A powerful, scalable template to kickstart your backend projects. Includes FastA
 **tests.py/:** Houses all application tests.
 
 **env_sample.txt:** Sample environment variables.
+
 **.flake8:** Contains the configurations for flake8.
+
 **.gitignore:** Specifies which folders/files to not push to github.
+
 **.pylintrc:** Contains the configurations for pylint.
-**alembic.ini:** Contains all the configurations for .
+
+**alembic.ini:** Contains all the configurations for.
+
 **docker-compose.yml:** Docker configurations for containerized setup.
+
 **Dockerfile:** Instructions to build docker image.
+
 **LICENSE:** License details.
+
 **pytest.ini:** Where all the pytest configurations will be kept.
+
 **railway.toml:** Contains all the railway configurations.
+
 **requirements.txt:** Lists all application dependencies.
+
 **start.sh:** Application start up processes.
 
 
@@ -167,13 +178,12 @@ start.sh
 
 </br>
 5. Start the Application
-  Development Mode
-  ```shell
+   Development Mode
+  ```
   uvicorn app.main:app --reload
   ```
-
   Production Mode
-  ```shell
+  ```
   fastapi run
   ```
 </br>
