@@ -178,10 +178,10 @@ start.sh
 
 </br>
 5. Start the Application
-   Development Mode
+   in Development Mode
 
   ```shell
-  uvicorn app.main:app --reload
+  fastapi dev
   ```
 </br>
   Production Mode
