@@ -10,4 +10,10 @@ repos:
     hooks:
       - id: MAIN
         config_file: .pylintrc
+        
+  - repo: https://github.com/GrandGaleTechnologies/behemoth-fastapi
+    rev: v0.7.2
+    hooks:
+      - id: ruff
+        config_file: ruff.toml
 
