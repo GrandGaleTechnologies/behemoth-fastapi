@@ -11,15 +11,3 @@ repos:
       - id: MAIN
         config_file: .pylintrc
 
-  - repo: https://github.com/GrandGaleTechnologies/behemoth-fastapi
-    rev: v0.7.2
-    hooks:
-      - id: build
-        config_file: railway.toml
-  
-  # - repo: local
-  #   hooks:
-  #     - id: run-alembic
-  #       name: Alembic
-  #       language: scripts
-  #       entry: ./start.sh
