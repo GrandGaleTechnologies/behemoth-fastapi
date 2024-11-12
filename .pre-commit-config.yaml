@@ -1,10 +1,10 @@
 repos:
-  - repo: https://github.com/Akashii0/behemoth-fastapi/blob/pre-commit-hook/.flake8
+  - repo: https://github.com/Akashii0/behemoth-fastapi/tree/pre-commit-hook/.flake8
     rev: v7.1.0  
     hooks:
       - id: flake8
 
-  - repo: https://github.com/Akashii0/behemoth-fastapi/blob/pre-commit-hook/.pylintrc
+  - repo: https://github.com/Akashii0/behemoth-fastapi/tree/pre-commit-hook/.pylintrc
     rev: v3.3.1
     hooks:
       - id: pylint
