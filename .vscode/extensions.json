@@ -1,9 +1,11 @@
 {
     "recommendations": [
-        "ms-python.vscode-pylance",
-        "charliermarsh.ruff",
+        "njpwerner.autodocstring",
         "donjayamanne.python-environment-manager",
+        "ms-python.flake8",
+        "ms-python.vscode-pylance",
+        "ms-python.pylint",
         "ms-python.python",
-        "njpwerner.autodocstring"
+        "charliermarsh.ruff"
     ]
 }
