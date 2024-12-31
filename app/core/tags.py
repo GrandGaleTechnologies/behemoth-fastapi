@@ -9,8 +9,7 @@ class RouteTags(BaseModel):
     """
 
     # Module Tags
-    AUTHOR: str = "Author APIs"
-    BOOK: str = "Book APIs"
+    SAMPLE: str = "Sample APIs"
 
 
 @lru_cache

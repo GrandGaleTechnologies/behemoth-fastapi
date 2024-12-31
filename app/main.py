@@ -8,7 +8,6 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.orm import Session
 
-from app.author.apis import router as author_router
 from app.common.dependencies import get_session
 from app.common.exceptions import (
     BadGatewayError,
@@ -23,6 +22,7 @@ from app.core.handlers import (
     request_validation_exception_handler,
 )
 from app.core.tags import RouteTags
+from app.sample_module.apis import router as sample_router
 
 # Globals
 tags = RouteTags()
@@ -52,7 +52,7 @@ app = FastAPI(
     contact={
         "name": "GrandGale Technologies",
         "url": "https://github.com/GrandGaleTechnologies",
-        "email": "angobello0@gmail.com",
+        "email": "contact@grandgale.tech",
     },
 )
 
@@ -89,4 +89,4 @@ async def health(_: Session = Depends(get_session)):
 
 
 # Routers
-app.include_router(author_router, prefix="/author", tags=[tags.AUTHOR])
+app.include_router(sample_router, tags=[tags.SAMPLE])

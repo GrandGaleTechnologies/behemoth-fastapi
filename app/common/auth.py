@@ -3,8 +3,10 @@ from datetime import datetime, timedelta
 import jwt
 from fastapi import HTTPException, status
 
+from app.common.exceptions import Unauthorized
 from app.core.settings import get_settings
 
+# Globals
 settings = get_settings()
 
 
@@ -50,43 +52,47 @@ class TokenGenerator:
             algorithm="HS256",
         )
 
-    async def verify(self, token: str, sub_head: str, _: bool = True):
-        """This method verifies the token.
+    async def verify(self, token: str, sub_head: str) -> str | None:
+        """
+        Verifies the provided JWT token.
 
         Args:
-            token (str): The refresh token.
-            sub_head (str): The sub head of the token
-            raise_exception (bool = True): raise an exception if token is invalid
+            token (str): The JWT token to verify.
+            sub_head (str): Expected prefix of the 'sub' field in the token payload.
 
         Returns:
-            str | None: The sub's ID.
+            str | None: The sub's ID if verification succeeds, or None if invalid.
+
+        Raises:
+            Unauthorized: If the token is invalid or expired.
         """
         try:
+            # Decode and validate the token
             payload = jwt.decode(
                 jwt=token,
                 key=self.secret_key,
                 algorithms=["HS256"],
             )
-            sub: str = payload.get("sub")
 
+            # Extract and validate the 'sub' field
+            sub: str | None = payload.get("sub")
+            if not sub:
+                raise Unauthorized("Token is missing the 'sub' field")
+
+            # Ensure the token is of type 'access'
             if payload.get("type") != "access":
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token"
-                )
+                raise Unauthorized("Token type is invalid")
 
-            if sub.split("-")[0] != sub_head:
-                raise HTTPException(
-                    status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token"
-                )
-            return "".join(sub.split("-")[1:])
+            # Validate the 'sub' structure
+            sub_parts = sub.split("-")
+            if sub_parts[0] != sub_head or len(sub_parts) < 2:
+                raise Unauthorized("Token 'sub' field structure is invalid")
+
+            # Return the ID part of 'sub'
+            return "".join(sub_parts[1:])
 
         except jwt.ExpiredSignatureError:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Access Token Has Expired",
-            )
+            raise Unauthorized("Token has expired")
 
         except jwt.PyJWTError:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token"
-            )
+            raise Unauthorized("Token verification failed")
