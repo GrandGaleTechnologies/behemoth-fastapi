@@ -162,7 +162,7 @@ start.sh
   Or with Docker
 
   ```shell
-  docker-compose up
+  docker compose up
   ```
 </br>
 
