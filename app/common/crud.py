@@ -37,7 +37,8 @@ class CRUDBase(Generic[T]):
         """
         Get all objects
         """
-        qs = await self.db.execute(select(self.model))
+        qs = select(self.model)
         if return_qs:
-            return qs.scalars()
-        return qs.scalars().all()
+            return qs
+        result = await self.db.execute(qs)
+        return result.scalars().all()
