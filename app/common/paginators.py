@@ -48,4 +48,4 @@ def paginate(*, qs: Query, page: int, size: int):
     Returns:
         Query: The paginated qs
     """
-    return qs.limit(size).offset(size * (page - 1)).all()
+    return qs.limit(size).offset(size * (page - 1))
