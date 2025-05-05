@@ -9,6 +9,8 @@ A powerful, scalable template to kickstart your backend projects. Includes FastA
   - [✨ Features](#-features)
   - [📁 Project Structure](#-project-structure)
   - [💡 Getting Started](#-getting-started)
+  - [🛠️ Using auto-module.py](#️-using-auto-modulepy)
+    - [To create a new module, simply run:](#to-create-a-new-module-simply-run)
   - [🎗 License](#-license)
   - [🚀 Deploy](#-deploy)
   - [🤝 Contribute to the Project](#-contribute-to-the-project)
@@ -193,7 +195,36 @@ start.sh
 
 6. Test the application by making requests to the endpoints.
 
-   
+
+## 🛠️ Using auto-module.py
+The auto-module.py script automates the creation of new FastAPI modules, saving you time and ensuring consistency. It generates the following structure for a new module:
+```bash
+app/
+└── ModuleName/
+    ├── routes/
+    │   ├── __init__.py
+    │   ├── base.py
+    ├── schemas/
+    │   ├── __init__.py
+    │   ├── base.py
+    │   ├── create.py
+    │   ├── edit.py
+    │   ├── response.py
+    ├── __init__.py
+    ├── apis.py
+    ├── models.py
+    ├── services.py
+    ├── selectors.py
+    ├── exceptions.py
+    └── formatters.py
+```
+### To create a new module, simply run:
+```bash
+python auto-module.py
+```
+Follow the prompts to specify the module name, and the script will handle the rest.
+
+
 ## 🎗 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
