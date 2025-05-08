@@ -1,3 +1,4 @@
+import textwrap
 from pathlib import Path
 
 
@@ -12,7 +13,7 @@ def create_module():
         app_dir.mkdir(parents=True)
         (app_dir / "__init__.py").touch()
 
-    module = input("What is the module name? ").strip().title()
+    module = input("What is the module name? ").strip().lower()
     module_path = app_dir / module
 
     if module_path.exists():
@@ -39,6 +40,7 @@ def create_module():
     # Define files and templates
     files = [
         "__init__.py",
+        "routes\\base.py",
         "apis.py",
         "models.py",
         "services.py",
@@ -47,19 +49,29 @@ def create_module():
         "formatters.py",
     ]
 
+    # NOTE: we add \ after the """ to escape and not have a \n newline
     file_templates = {
-        "apis.py": f"""from fastapi import APIRouter
+        # routes/base.py
+        "routes\\base.py": """\
+        from fastapi import APIRouter
 
-from app.core.tags import RouteTags
-from app.{module}.routes.base import router as base_router
+        # Globals
+        router = APIRouter()
+        """,
+        # apis.py
+        "apis.py": f"""\
+        from fastapi import APIRouter
 
-# Globals
-router = APIRouter()
-tags = RouteTags()
+        from app.core.tags import RouteTags
+        from app.{module}.routes.base import router as base_router
 
-# Routes
-router.include_router(base_router, prefix="/{module.lower()}s")
-""",
+        # Globals
+        router = APIRouter()
+        tags = RouteTags()
+
+        # Routes
+        router.include_router(base_router, prefix="/{module.lower()}s")
+        """,
         # Future example for services.py
         # "services.py": f"# Services for {module} module\n",
     }
@@ -69,8 +81,9 @@ router.include_router(base_router, prefix="/{module.lower()}s")
         file_path = module_path / file
         content = file_templates.get(file)
         if content:
-            file_path.write_text(content)
+            file_path.write_text(textwrap.dedent(content))
         else:
+            print(file_path)
             file_path.touch()
 
     print(f"✅ Module '{module}' created successfully")
