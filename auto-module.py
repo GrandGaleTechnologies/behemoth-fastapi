@@ -40,7 +40,7 @@ def create_module():
     # Define files and templates
     files = [
         "__init__.py",
-        "routes\\base.py",
+        "routes/base.py",
         "apis.py",
         "models.py",
         "services.py",
@@ -52,7 +52,7 @@ def create_module():
     # NOTE: we add \ after the """ to escape and not have a \n newline
     file_templates = {
         # routes/base.py
-        "routes\\base.py": """\
+        "routes/base.py": """\
         from fastapi import APIRouter
 
         # Globals
