@@ -3,7 +3,7 @@ import math
 from sqlalchemy.orm import Query
 
 
-def get_pagination_metadata(*, tno_items: int, count: int, page: int, size: int):
+async def get_pagination_metadata(*, tno_items: int, count: int, page: int, size: int):
     """This function is used to the pagination metadata of a response.
 
     Args:
@@ -37,7 +37,7 @@ def get_pagination_metadata(*, tno_items: int, count: int, page: int, size: int)
     return metadata
 
 
-def paginate(*, qs: Query, page: int, size: int):
+async def paginate(*, qs: Query, page: int, size: int):
     """This function paginates a queryset
 
     Args:
