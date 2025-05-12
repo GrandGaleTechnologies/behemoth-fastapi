@@ -44,7 +44,7 @@ class TokenGenerator:
             "sub": sub,
             "iat": iat.timestamp(),
             "exp": expire.timestamp(),
-            "iss": "dsspoi.confidential",
+            "iss": "behemoth.grandgale.tech",
         }
         return jwt.encode(
             data,

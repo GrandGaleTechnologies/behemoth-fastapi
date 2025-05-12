@@ -11,6 +11,9 @@ class CustomHTTPException(Exception):
         self.msg = msg
         self.loc = loc
 
+    def __str__(self) -> str:
+        return f"Status Code: {self.status_code}\nMessage: {self.msg}\nLocation: {self.loc}"
+
 
 class InternalServerError(Exception):
     """
@@ -21,6 +24,9 @@ class InternalServerError(Exception):
         self.msg = msg
         self.loc = loc
         self.timestamp = datetime.now()
+
+    def __str__(self) -> str:
+        return f"Message: {self.msg}\nLocation: {self.loc}\nTimestamp: {self.timestamp}"
 
 
 class BadGatewayError(Exception):
@@ -33,6 +39,9 @@ class BadGatewayError(Exception):
         self.loc = loc
         self.service = service
         self.timestamp = datetime.now()
+
+    def __str__(self) -> str:
+        return f"Message: {self.msg}\nLocation: {self.loc}\nService: {self.service}\nTimestamp: {self.timestamp}"
 
 
 class BadRequest(CustomHTTPException):
