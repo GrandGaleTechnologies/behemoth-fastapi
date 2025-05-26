@@ -10,6 +10,7 @@ services:
       - 8000:8000
     environment:
       - DEBUG=true
+      - LOGFIRE_TOKEN=supersecret
       - POSTGRES_DATABASE_URL=postgresql+asyncpg://behemoth:backend@behemoth_db:5432/behemoth_db
     depends_on:
       - behemoth_db

@@ -1,3 +1,4 @@
+# type: ignore
 import os
 from functools import lru_cache
 
@@ -10,10 +11,13 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
     # App
-    DEBUG: bool = os.environ.get("DEBUG")  # type: ignore
+    DEBUG: bool = os.environ.get("DEBUG")
+
+    # Logfire
+    LOGFIRE_TOKEN: str | None = os.environ.get("LOGFIRE_TOKEN")
 
     # DB Settings
-    POSTGRES_DATABASE_URL: str = os.environ.get("POSTGRES_DATABASE_URL")  # type: ignore
+    POSTGRES_DATABASE_URL: str = os.environ.get("POSTGRES_DATABASE_URL")
 
 
 @lru_cache

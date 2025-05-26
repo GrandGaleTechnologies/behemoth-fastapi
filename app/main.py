@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 
+import logfire
 from anyio import to_thread
 from fastapi import Depends, FastAPI
 from fastapi.exceptions import RequestValidationError
@@ -21,11 +22,13 @@ from app.core.handlers import (
     internal_server_error_exception_handler,
     request_validation_exception_handler,
 )
+from app.core.settings import get_settings
 from app.core.tags import RouteTags
 from app.sample_module.apis import router as sample_router
 
 # Globals
 tags = RouteTags()
+settings = get_settings()
 
 
 # Lifespan (startup, shutdown)
@@ -79,6 +82,15 @@ app.add_exception_handler(RequestValidationError, request_validation_exception_h
 app.add_exception_handler(InternalServerError, internal_server_error_exception_handler)  # type: ignore
 app.add_exception_handler(BadGatewayError, bad_gateway_error_exception_handler)  # type: ignore
 app.add_exception_handler(CustomHTTPException, custom_http_exception_handler)  # type: ignore
+
+
+# Logfire
+if settings.LOGFIRE_TOKEN:
+    logfire.configure(
+        token=settings.LOGFIRE_TOKEN, environment="dev" if settings.DEBUG else "prod"
+    )
+    logfire.instrument_fastapi(app)
+    logfire.instrument_asyncpg()
 
 
 # Healthcheck
