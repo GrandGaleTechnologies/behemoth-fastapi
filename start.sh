@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-alembic upgrade head
+# Run Alembic migrations
+uv run -- alembic upgrade head
 
-fastapi run --port $PORT
+uv run -- fastapi run --port $PORT
