@@ -2,14 +2,17 @@ FROM python:3.12
 
 ENV PYTHONUNBUFFERED=1
 
-# Install curl for downloading uv and bash for script
-RUN apt-get update && apt-get install -y curl bash \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+# The installer requires curl (and certificates) to download the release archive
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates
 
-# Install uv (standalone binary)
-RUN curl -LsSf https://astral.sh/uv/install.sh | bash
+# Download the latest installer
+ADD https://astral.sh/uv/install.sh /uv-installer.sh
 
-ENV PATH="/root/.cargo/bin:/root/.local/bin:$PATH"
+# Run the installer then remove it
+RUN sh /uv-installer.sh && rm /uv-installer.sh
+
+# Ensure the installed binary is on the `PATH`
+ENV PATH="/root/.local/bin/:$PATH"
 
 WORKDIR /app
 
