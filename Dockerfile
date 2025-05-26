@@ -15,9 +15,6 @@ WORKDIR /app
 
 COPY . /app
 
-# Use uv to install deps
-RUN uv add -r requirements.txt
-
 # Optional: Install uvloop only if on Linux (already here)
 RUN uv add uvloop
 
