@@ -16,10 +16,10 @@ WORKDIR /app
 COPY . /app
 
 # Use uv to install deps
-RUN uv pip install -r requirements.txt
+RUN uv add -r requirements.txt
 
 # Optional: Install uvloop only if on Linux (already here)
-RUN uv pip install uvloop
+RUN uv add uvloop
 
 # Entrypoint to shell script
 CMD ["/bin/bash", "/app/start.sh"]
