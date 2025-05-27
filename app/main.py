@@ -84,7 +84,7 @@ app.add_exception_handler(BadGatewayError, bad_gateway_error_exception_handler) 
 app.add_exception_handler(CustomHTTPException, custom_http_exception_handler)  # type: ignore
 
 
-# Logfire
+# Logfire Config
 if settings.LOGFIRE_TOKEN:
     logfire.configure(
         token=settings.LOGFIRE_TOKEN, environment="dev" if settings.DEBUG else "prod"
