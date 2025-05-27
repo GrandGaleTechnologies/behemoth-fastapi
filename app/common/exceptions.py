@@ -34,14 +34,33 @@ class BadGatewayError(Exception):
     Common base class for all 500 bad gateway error responses
     """
 
-    def __init__(self, msg: str, *, loc: str, service: str):
+    def __init__(
+        self,
+        msg: str,
+        *,
+        loc: str,
+        service: str,
+        payload: dict | None = None,
+        response_status_code: int | None = None,
+        response: str | dict | None = None,
+    ):
         self.msg = msg
         self.loc = loc
         self.service = service
+        self.payload = payload
+        self.response_status_code = response_status_code
+        self.response = response
         self.timestamp = datetime.now()
 
     def __str__(self) -> str:
-        return f"Message: {self.msg}\nLocation: {self.loc}\nService: {self.service}\nTimestamp: {self.timestamp}"
+        return (
+            f"Message: {self.msg}\n"
+            f"Location: {self.loc}\n"
+            f"Service: {self.service}\n"
+            f"Timestamp: {self.timestamp}\n"
+            f"Payload: {self.payload}\n"
+            f"Response: {self.response}\n"
+        )
 
 
 class BadRequest(CustomHTTPException):
