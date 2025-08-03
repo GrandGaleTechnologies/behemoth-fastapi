@@ -51,7 +51,7 @@ app = FastAPI(
     title="Behemoth FastAPI",
     lifespan=lifespan,
     default_response_class=ORJSONResponse,
-    docs_url="/",
+    docs_url="/" if settings.DEBUG else None,
     contact={
         "name": "GrandGale Technologies",
         "url": "https://github.com/GrandGaleTechnologies",
