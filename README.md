@@ -192,6 +192,71 @@ def secure_data(user: User = Depends(get_current_user)):
 3. Token is sent with each protected request
 4. Backend validates token and grants access
 
+## Rate Limiting
+
+This project uses Redis-based rate limiting through `fastapi-limiter`. By default, it allows 3 requests per second per endpoint.
+
+### Redis Setup
+
+1. Install Redis on Windows using Chocolatey:
+```powershell
+choco install redis-64
+```
+
+2. Start Redis Server:
+```powershell
+redis-server
+```
+
+3. Verify Redis is running:
+```powershell
+redis-cli ping
+```
+You should see `PONG` as the response.
+
+### Environment Configuration
+
+Add Redis configuration to your `.env` file:
+```env
+REDIS_BROKER_URL=redis://localhost:6379/0
+```
+
+### Rate Limiting Configuration
+
+Rate limiting is configured in `app/main.py`:
+```python
+REQ_RATE = 3        # Number of requests allowed
+REQ_RATE_TIME = 1   # Time window in seconds
+```
+
+This means each endpoint allows 3 requests per second. After exceeding this limit, requests will receive a 429 (Too Many Requests) response.
+
+### Testing Rate Limits
+
+You can test rate limiting through:
+
+1. **Swagger UI**:
+   - Navigate to `http://localhost:8000`
+   - Make multiple rapid requests to any endpoint
+   - After 3 requests within 1 second, you'll receive a 429 response
+
+
+### Monitoring Rate Limits
+
+Monitor Redis rate limiting in real-time:
+```powershell
+redis-cli monitor
+```
+
+### Troubleshooting
+
+If Redis connection fails:
+1. Verify Redis is running: `redis-cli ping`
+2. Check Redis service status: `sc query redis`
+3. Start Redis service if needed: `sc start redis`
+4. Verify connection URL in `.env` file
+
+
 ## 🎗 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -214,3 +279,4 @@ Contributions are welcome! Fork the repo, create a branch, and submit a PR. Enga
 * **LinkedIn:** [https://linkedin.com/in/angobello0](https://linkedin.com/in/angobello0)
 * **Upwork:** [https://www.upwork.com/freelancers/\~01bb1007bf8311388a](https://www.upwork.com/freelancers/~01bb1007bf8311388a)
 * **Instagram:** [https://www.instagram.com/bello\_ango0/](https://www.instagram.com/grandgale_technologies0/)
+
