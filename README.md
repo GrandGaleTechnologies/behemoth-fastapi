@@ -196,29 +196,46 @@ def secure_data(user: User = Depends(get_current_user)):
 
 This project uses Redis-based rate limiting through `fastapi-limiter`. By default, it allows 3 requests per second per endpoint.
 
-### Redis Setup
+### Redis Setup with Docker
 
-1. Install Redis on Windows using Chocolatey:
-```powershell
-choco install redis-64
+1. Add Redis service to your `docker-compose.yml`:
+```yaml
+// filepath: docker-compose.yml
+services:
+  # ...existing services...
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app_network
+
+volumes:
+  redis_data:
+
+networks:
+  app_network:
+    driver: bridge
 ```
 
-2. Start Redis Server:
+2. Start Redis container:
 ```powershell
-redis-server
+docker-compose up -d redis
 ```
 
 3. Verify Redis is running:
 ```powershell
-redis-cli ping
+docker-compose exec redis redis-cli ping
 ```
 You should see `PONG` as the response.
 
 ### Environment Configuration
 
-Add Redis configuration to your `.env` file:
+Update your `.env` file with the Redis container URL:
 ```env
-REDIS_BROKER_URL=redis://localhost:6379/0
+REDIS_BROKER_URL=redis://redis:6379/0
 ```
 
 ### Rate Limiting Configuration
@@ -233,29 +250,50 @@ This means each endpoint allows 3 requests per second. After exceeding this limi
 
 ### Testing Rate Limits
 
-You can test rate limiting through:
-
 1. **Swagger UI**:
    - Navigate to `http://localhost:8000`
    - Make multiple rapid requests to any endpoint
    - After 3 requests within 1 second, you'll receive a 429 response
 
+2. **Using Docker CLI**:
+```powershell
+# Make multiple requests quickly
+for ($i = 1; $i -le 4; $i++) {
+    docker-compose exec api curl http://localhost:8000/health
+}
+```
 
 ### Monitoring Rate Limits
 
 Monitor Redis rate limiting in real-time:
 ```powershell
-redis-cli monitor
+docker-compose exec redis redis-cli monitor
 ```
 
 ### Troubleshooting
 
 If Redis connection fails:
-1. Verify Redis is running: `redis-cli ping`
-2. Check Redis service status: `sc query redis`
-3. Start Redis service if needed: `sc start redis`
-4. Verify connection URL in `.env` file
+1. Check Redis container status:
+```powershell
+docker-compose ps redis
+```
 
+2. View Redis logs:
+```powershell
+docker-compose logs redis
+```
+
+3. Verify Redis network connectivity:
+```powershell
+docker-compose exec api ping redis
+```
+
+4. Check Redis container health:
+```powershell
+docker inspect -f '{{.State.Health.Status}}' behemoth-fastapi-redis-1
+```
+
+5. Restart Redis
 
 ## 🎗 License
 
