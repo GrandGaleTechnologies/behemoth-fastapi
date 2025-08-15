@@ -13,7 +13,6 @@ from fastapi_limiter.depends import RateLimiter
 from secure import Secure
 from sqlalchemy.orm import Session
 
-
 from app.common.dependencies import get_session
 from app.common.exceptions import (
     BadGatewayError,
@@ -89,6 +88,7 @@ app.add_middleware(
     GZipMiddleware,
     minimum_size=5000,  # Minimum size of the response before it is compressed in bytes
 )
+
 
 @app.middleware("http")
 async def add_security_headers(request, call_next):
