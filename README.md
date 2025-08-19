@@ -196,40 +196,90 @@ def secure_data(user: User = Depends(get_current_user)):
 
 This project uses Redis-based rate limiting through `fastapi-limiter`. By default, it allows 3 requests per second per endpoint.
 
-### Redis Setup with Docker
+### Redis Setup with Docker (Single Container)
 
-1. Add Redis service to your `docker-compose.yml`:
-```yaml
-// filepath: docker-compose.yml
-services:
-  # ...existing services...
-  redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    networks:
-      - app_network
+You can run Redis directly as a standalone container:
 
-volumes:
-  redis_data:
-
-networks:
-  app_network:
-    driver: bridge
+```bash
+docker run -d \
+  --name behemoth-redis \
+  -p 6379:6379 \
+  -v redis_data:/data \
+  redis:latest
 ```
 
-2. Start Redis container:
-```powershell
-docker-compose up -d redis
+This will:
+
+* Run Redis in detached mode (`-d`)
+* Name the container `behemoth-redis`
+* Expose Redis on port `6379`
+* Persist data in a Docker-managed volume (`redis_data`)
+
+### Verify Redis is Running
+
+```bash
+docker exec -it behemoth-redis redis-cli ping
 ```
 
-3. Verify Redis is running:
-```powershell
-docker-compose exec redis redis-cli ping
-```
 You should see `PONG` as the response.
+
+---
+
+### Environment Configuration
+
+Update your `.env` file with the Redis container URL (since it’s exposed on localhost):
+
+```env
+REDIS_BROKER_URL=redis://localhost:6379/0
+```
+
+---
+
+### Testing Rate Limits
+
+1. **Swagger UI**
+
+   * Navigate to `http://localhost:8000`
+   * Make multiple rapid requests to any endpoint
+   * After 3 requests within 1 second, you’ll receive a **429 Too Many Requests**
+
+2. **Curl**
+
+```bash
+for i in {1..4}; do curl http://localhost:8000/health; done
+```
+
+---
+
+### Monitoring Redis
+
+```bash
+docker exec -it behemoth-redis redis-cli monitor
+```
+
+---
+
+### Troubleshooting
+
+If Redis connection fails:
+
+1. Check container status:
+
+```bash
+docker ps -f name=behemoth-redis
+```
+
+2. View logs:
+
+```bash
+docker logs behemoth-redis
+```
+
+3. Restart Redis:
+
+```bash
+docker restart behemoth-redis
+```
 
 ### Environment Configuration
 
