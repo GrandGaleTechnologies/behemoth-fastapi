@@ -1,12 +1,16 @@
 from contextlib import asynccontextmanager
 
 import logfire
+import redis.asyncio as redis
 from anyio import to_thread
 from fastapi import Depends, FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import ORJSONResponse
+from fastapi_limiter import FastAPILimiter
+from fastapi_limiter.depends import RateLimiter
+from secure import Secure
 from sqlalchemy.orm import Session
 
 from app.common.dependencies import get_session
@@ -29,6 +33,10 @@ from app.sample_module.apis import router as sample_router
 # Globals
 tags = RouteTags()
 settings = get_settings()
+secure_headers = Secure.with_default_headers()
+# constants
+REQ_RATE = 3  # Number of requests
+REQ_RATE_TIME = 1  # Number of seconds
 
 
 # Lifespan (startup, shutdown)
@@ -41,6 +49,12 @@ async def lifespan(_: FastAPI):
     # Bigger Threadpool i.e you send a bunch of requests it will handle a max of 1000 at a time, the default is 40 # pylint: disable=line-too-long
     limiter = to_thread.current_default_thread_limiter()
     limiter.total_tokens = 1000
+
+    print("Setting up rate limiter")
+    redis_connection = redis.from_url(
+        settings.REDIS_BROKER_URL, encoding="utf-8", decode_responses=True
+    )
+    await FastAPILimiter.init(redis_connection)
 
     # Shutdown Code
     yield
@@ -76,6 +90,16 @@ app.add_middleware(
 )
 
 
+@app.middleware("http")
+async def add_security_headers(request, call_next):
+    """
+    Middle wire for adding security headers
+    """
+    response = await call_next(request)
+    await secure_headers.set_headers_async(response)
+    return response
+
+
 # Exception Handlers
 app.add_exception_handler(Exception, base_exception_handler)
 app.add_exception_handler(RequestValidationError, request_validation_exception_handler)  # type: ignore
@@ -101,4 +125,8 @@ async def health(_: Session = Depends(get_session)):
 
 
 # Routers
-app.include_router(sample_router, tags=[tags.SAMPLE])
+app.include_router(
+    sample_router,
+    tags=[tags.SAMPLE],
+    dependencies=[Depends(RateLimiter(times=REQ_RATE, seconds=REQ_RATE_TIME))],
+)

@@ -192,6 +192,159 @@ def secure_data(user: User = Depends(get_current_user)):
 3. Token is sent with each protected request
 4. Backend validates token and grants access
 
+## Rate Limiting
+
+This project uses Redis-based rate limiting through `fastapi-limiter`. By default, it allows 3 requests per second per endpoint.
+
+### Redis Setup with Docker (Single Container)
+
+You can run Redis directly as a standalone container:
+
+```bash
+docker run -d \
+  --name behemoth-redis \
+  -p 6379:6379 \
+  -v redis_data:/data \
+  redis:latest
+```
+
+This will:
+
+* Run Redis in detached mode (`-d`)
+* Name the container `behemoth-redis`
+* Expose Redis on port `6379`
+* Persist data in a Docker-managed volume (`redis_data`)
+
+### Verify Redis is Running
+
+```bash
+docker exec -it behemoth-redis redis-cli ping
+```
+
+You should see `PONG` as the response.
+
+---
+
+### Environment Configuration
+
+Update your `.env` file with the Redis container URL (since it’s exposed on localhost):
+
+```env
+REDIS_BROKER_URL=redis://localhost:6379/0
+```
+
+---
+
+### Testing Rate Limits
+
+1. **Swagger UI**
+
+   * Navigate to `http://localhost:8000`
+   * Make multiple rapid requests to any endpoint
+   * After 3 requests within 1 second, you’ll receive a **429 Too Many Requests**
+
+2. **Curl**
+
+```bash
+for i in {1..4}; do curl http://localhost:8000/health; done
+```
+
+---
+
+### Monitoring Redis
+
+```bash
+docker exec -it behemoth-redis redis-cli monitor
+```
+
+---
+
+### Troubleshooting
+
+If Redis connection fails:
+
+1. Check container status:
+
+```bash
+docker ps -f name=behemoth-redis
+```
+
+2. View logs:
+
+```bash
+docker logs behemoth-redis
+```
+
+3. Restart Redis:
+
+```bash
+docker restart behemoth-redis
+```
+
+### Environment Configuration
+
+Update your `.env` file with the Redis container URL:
+```env
+REDIS_BROKER_URL=redis://redis:6379/0
+```
+
+### Rate Limiting Configuration
+
+Rate limiting is configured in `app/main.py`:
+```python
+REQ_RATE = 3        # Number of requests allowed
+REQ_RATE_TIME = 1   # Time window in seconds
+```
+
+This means each endpoint allows 3 requests per second. After exceeding this limit, requests will receive a 429 (Too Many Requests) response.
+
+### Testing Rate Limits
+
+1. **Swagger UI**:
+   - Navigate to `http://localhost:8000`
+   - Make multiple rapid requests to any endpoint
+   - After 3 requests within 1 second, you'll receive a 429 response
+
+2. **Using Docker CLI**:
+```powershell
+# Make multiple requests quickly
+for ($i = 1; $i -le 4; $i++) {
+    docker-compose exec api curl http://localhost:8000/health
+}
+```
+
+### Monitoring Rate Limits
+
+Monitor Redis rate limiting in real-time:
+```powershell
+docker-compose exec redis redis-cli monitor
+```
+
+### Troubleshooting
+
+If Redis connection fails:
+1. Check Redis container status:
+```powershell
+docker-compose ps redis
+```
+
+2. View Redis logs:
+```powershell
+docker-compose logs redis
+```
+
+3. Verify Redis network connectivity:
+```powershell
+docker-compose exec api ping redis
+```
+
+4. Check Redis container health:
+```powershell
+docker inspect -f '{{.State.Health.Status}}' behemoth-fastapi-redis-1
+```
+
+5. Restart Redis
+
 ## 🎗 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -214,3 +367,4 @@ Contributions are welcome! Fork the repo, create a branch, and submit a PR. Enga
 * **LinkedIn:** [https://linkedin.com/in/angobello0](https://linkedin.com/in/angobello0)
 * **Upwork:** [https://www.upwork.com/freelancers/\~01bb1007bf8311388a](https://www.upwork.com/freelancers/~01bb1007bf8311388a)
 * **Instagram:** [https://www.instagram.com/bello\_ango0/](https://www.instagram.com/grandgale_technologies0/)
+

@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     # DB Settings
     POSTGRES_DATABASE_URL: str = os.environ.get("POSTGRES_DATABASE_URL")
 
+    # REDIS
+    REDIS_BROKER_URL: str = os.environ.get("REDIS_BROKER_URL")
+
 
 @lru_cache
 def get_settings():
