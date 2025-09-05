@@ -1,22 +1,40 @@
+from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-
 from app.core.settings import get_settings
 
 settings = get_settings()
 
-engine = create_async_engine(
-    url=settings.POSTGRES_DATABASE_URL,
-    pool_pre_ping=True,
-    pool_size=100,  # The size of the connection pool
-    max_overflow=50,  # The maximum number of connections that can be opened beyond the pool size. Set to -1 for no limit.
-)
+# Async DB URL for FastAPI runtime
+ASYNC_DATABASE_URL = settings.POSTGRES_DATABASE_URL
 
+# Sync DB URL for Alembic migrations
+SYNC_DATABASE_URL = settings.SYNC_DATABASE_URL or "sqlite:///./app.db"
 
-AsyncSessionLocal = sessionmaker(  # type: ignore
-    bind=engine,  # type: ignore
+# Engines
+async_engine = create_async_engine(ASYNC_DATABASE_URL, future=True, echo=settings.DEBUG)
+sync_engine = create_engine(SYNC_DATABASE_URL, future=True)
+
+# Session factories
+AsyncSessionLocal = sessionmaker(
+    bind=async_engine,
+    autocommit=False,
+    autoflush=False,
     class_=AsyncSession,
     expire_on_commit=False,
 )
 
-DBBase = declarative_base()
+SyncSessionLocal = sessionmaker(
+    bind=sync_engine,
+    autocommit=False,
+    autoflush=False,
+)
+
+# Base model
+Base = declarative_base()
+
+
+# Dependency for FastAPI (async sessions)
+async def get_db():
+    async with AsyncSessionLocal() as session:
+        yield session
