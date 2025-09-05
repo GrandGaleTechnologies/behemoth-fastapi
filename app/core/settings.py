@@ -1,9 +1,6 @@
-# type: ignore
-import os
 from functools import lru_cache
-
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
+from pydantic import Field  # ✅ import Field separately
 
 class Settings(BaseSettings):
     """The settings for the application."""
@@ -11,19 +8,24 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env")
 
     # App
-    DEBUG: bool = os.environ.get("DEBUG")
+    DEBUG: bool = Field(default=True)
 
     # Logfire
-    LOGFIRE_TOKEN: str | None = os.environ.get("LOGFIRE_TOKEN")
+    LOGFIRE_TOKEN: str | None = None
 
     # DB Settings
-    POSTGRES_DATABASE_URL: str = os.environ.get("POSTGRES_DATABASE_URL")
+    POSTGRES_DATABASE_URL: str = Field(
+        default="sqlite+aiosqlite:///./app.db", env="POSTGRES_DATABASE_URL"
+    )
+
+    SYNC_DATABASE_URL: str = Field(
+        default="sqlite:///./app.db", env="SYNC_DATABASE_URL"
+    )
 
     # REDIS
-    REDIS_BROKER_URL: str = os.environ.get("REDIS_BROKER_URL")
-
+    REDIS_BROKER_URL: str | None = Field(default=None, env="REDIS_BROKER_URL")
 
 @lru_cache
-def get_settings():
-    """This function returns the settings obj for the application."""
+def get_settings() -> Settings:
+    """Cached settings instance"""
     return Settings()

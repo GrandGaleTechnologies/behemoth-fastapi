@@ -19,7 +19,8 @@ async def route_sample_get():
     """
 
     return {
-        "msg": "Lowkey on God",
+        "status": "success",
+        "error": None,
         "data": {
             "website": "https://grandgale.tech",
             "email": "contact@grandgale.tech",
