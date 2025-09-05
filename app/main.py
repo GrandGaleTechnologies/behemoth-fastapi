@@ -1,15 +1,15 @@
 from contextlib import asynccontextmanager
 
 import logfire
-import redis.asyncio as redis
+#import redis.asyncio as redis
 from anyio import to_thread
 from fastapi import Depends, FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import ORJSONResponse
-from fastapi_limiter import FastAPILimiter
-from fastapi_limiter.depends import RateLimiter
+#from fastapi_limiter import FastAPILimiter
+#from fastapi_limiter.depends import RateLimiter
 from secure import Secure
 from sqlalchemy.orm import Session
 
@@ -51,10 +51,10 @@ async def lifespan(_: FastAPI):
     limiter.total_tokens = 1000
 
     print("Setting up rate limiter")
-    redis_connection = redis.from_url(
-        settings.REDIS_BROKER_URL, encoding="utf-8", decode_responses=True
-    )
-    await FastAPILimiter.init(redis_connection)
+    #redis_connection = redis.from_url(
+     #   settings.REDIS_BROKER_URL, encoding="utf-8", decode_responses=True
+    #)
+    #await FastAPILimiter.init(redis_connection)
 
     # Shutdown Code
     yield
@@ -128,5 +128,5 @@ async def health(_: Session = Depends(get_session)):
 app.include_router(
     sample_router,
     tags=[tags.SAMPLE],
-    dependencies=[Depends(RateLimiter(times=REQ_RATE, seconds=REQ_RATE_TIME))],
 )
+
