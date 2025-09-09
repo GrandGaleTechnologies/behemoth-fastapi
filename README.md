@@ -353,7 +353,7 @@ This project uses pre-commit hooks to ensure code quality. The hooks include Ruf
 
 1. Install pre-commit:
 ```bash
-pip install pre-commit
+uv add --dev pre-commit
 ```
 
 2. Install the pre-commit hooks:
