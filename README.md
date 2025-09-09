@@ -345,6 +345,42 @@ docker inspect -f '{{.State.Health.Status}}' behemoth-fastapi-redis-1
 
 5. Restart Redis
 
+## Pre-commit Setup
+
+This project uses pre-commit hooks to ensure code quality. The hooks include Ruff for linting and formatting, and Flake8 for additional code style checks.
+
+### Installation
+
+1. Install pre-commit:
+```bash
+uv add --dev pre-commit
+```
+
+2. Install the pre-commit hooks:
+```bash
+pre-commit install
+```
+
+### Usage
+
+- The hooks will run automatically on `git commit`
+- To manually run the hooks on all files:
+```bash
+pre-commit run --all-files
+```
+
+- To run specific hooks:
+```bash
+pre-commit run ruff --all-files
+pre-commit run flake8 --all-files
+```
+
+### Configuration
+
+Pre-commit configuration is stored in `.pre-commit-config.yaml` and includes:
+- Ruff for linting and formatting
+- Flake8 for additional code style checks
+
 ## 🎗 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
