@@ -29,6 +29,7 @@ from app.core.handlers import (
 from app.core.settings import get_settings
 from app.core.tags import RouteTags
 from app.sample_module.apis import router as sample_router
+from app.core.database import initialize_connection_pools
 
 # Globals
 tags = RouteTags()
@@ -55,6 +56,10 @@ async def lifespan(_: FastAPI):
         settings.REDIS_BROKER_URL, encoding="utf-8", decode_responses=True
     )
     await FastAPILimiter.init(redis_connection)
+
+    # initilize connection pools
+    print("initializing connection")
+    await initialize_connection_pools()
 
     # Shutdown Code
     yield
