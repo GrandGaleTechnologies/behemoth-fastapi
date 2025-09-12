@@ -2,7 +2,6 @@
 from typing import Generic, Type, TypeVar
 
 from bson import ObjectId
-from pydantic import BaseModel
 from pymongo.collection import Collection
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
