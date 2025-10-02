@@ -66,7 +66,7 @@ class MongoCRUDBase(Generic[P]):
         doc = self.collection.find_one({"_id": result.inserted_id})
         return self.model(**doc)
 
-    def get(self, **filters) -> P | None:
+    def get(self, filters) -> P | None:
         """
         Retrieve a single document matching filters
         """
