@@ -52,6 +52,7 @@ app/
   common/
     annotations.py
     auth.py
+    cache.py
     crud.py
     dependencies.py
     exceptions.py
@@ -320,6 +321,51 @@ Monitor Redis rate limiting in real-time:
 docker-compose exec redis redis-cli monitor
 ```
 
+### Caching
+    ```python
+    from app.common.cache import CacheManager
+    from app.sample_module.schemas import SampleModel # Example Pydantic model
+
+    # Initialize for a specific model with a TTL of 300 seconds
+    sample_cache_manager = CacheManager(ttl=300, model_class=SampleModel)
+
+    # Or initialize without a model_class if you just need to store/retrieve raw data
+    generic_cache_manager = CacheManager(ttl=60)
+    ```
+
+2.  **Set Data in Cache**:
+    ```python
+    # For sample_cache_manager (with SampleModel)
+    await sample_cache_manager.set(
+      data={"id": 1}, 
+      value=SampleModel(id=1, name="Test"), 
+      cache_prefix="sample:"
+    )
+
+    # For generic_cache_manager (raw dict)
+    await generic_cache_manager.set(
+      data={"key": "my_data"}, 
+      value={"message": "Hello, cached world!"}, 
+      cache_prefix="generic:"
+    )
+    ```
+
+3.  **Get Data from Cache**:
+    ```python
+    # For sample_cache_manager (will return SampleModel instance or None)
+    cached_sample = await sample_cache_manager.get(data={"id": 1}, cache_prefix="sample:")
+    if cached_sample:
+        print(f"Cached Sample: {cached_sample.name}")
+
+    # For generic_cache_manager (will return dict or None)
+    cached_generic = await generic_cache_manager.get(
+      data={"key": "my_data"}, 
+      cache_prefix="generic:"
+    )
+    if cached_generic:
+        print(f"Cached Generic: {cached_generic['message']}")
+    
+    
 ### Troubleshooting
 
 If Redis connection fails:
