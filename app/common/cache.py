@@ -28,7 +28,13 @@ class CacheManager(Generic[T]):
     Generic cache manager for Redis-backed caching.
     """
 
-    def __init__(self, ttl: int, model_class: Type[T] | None = None):
+    def __init__(
+        self,
+        ttl: int,
+        cache_prefix: str,
+        data: dict,
+        model_class: Type[T] | None = None,
+    ):
         """
         Initialize the cache manager.
 
@@ -39,19 +45,18 @@ class CacheManager(Generic[T]):
         self.redis_client = get_redis_client()
         self.ttl = ttl
         self.model_class = model_class
+        self.cache_prefix = cache_prefix
+        self.data = data
 
     @instrument("Get cached data from Redis")
-    async def get(self, data: dict, cache_prefix: str) -> T | None:
+    async def get(self) -> T | None:
         """
         Get cached data from Redis.
-
-        Args:
-            data: Dictionary containing the data to generate cache key from
 
         Returns:
             Cached data if found, None otherwise
         """
-        cache_key = generate_cache_key(data, cache_prefix)
+        cache_key = generate_cache_key(self.data, self.cache_prefix)
         info(f"Looking for cache key: {cache_key}")
 
         cached_data = await self.redis_client.get(cache_key)
@@ -69,15 +74,17 @@ class CacheManager(Generic[T]):
         return data  # type: ignore
 
     @instrument("Set cached data in Redis")
-    async def set(self, data: dict, value: Any, cache_prefix: str):
+    async def set(
+        self,
+        value: Any,
+    ):
         """
         Cache data in Redis.
 
         Args:
-            data: Dictionary containing the data to generate cache key from
             value: The value to cache (will be JSON-encoded)
         """
-        cache_key = generate_cache_key(data, cache_prefix)
+        cache_key = generate_cache_key(self.data, self.cache_prefix)
         info(f"Setting cache key: {cache_key}")
 
         encoded_data = json.dumps(jsonable_encoder(value))
