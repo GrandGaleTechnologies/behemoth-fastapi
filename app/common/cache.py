@@ -41,6 +41,8 @@ class CacheManager(Generic[T]):
         Args:
             ttl: Time-to-live for cached items in seconds
             model_class: (optional) Pydantic or dataclass type for decoding cached data
+            cache_prefix: The cache prefix
+            data: Dictionary containing the data to generate cache key from
         """
         self.redis_client = get_redis_client()
         self.ttl = ttl
