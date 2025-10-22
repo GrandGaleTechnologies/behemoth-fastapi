@@ -12,8 +12,11 @@ services:
       - DEBUG=true
       - LOGFIRE_TOKEN=supersecret
       - POSTGRES_DATABASE_URL=postgresql+asyncpg://behemoth:backend@behemoth_db:5432/behemoth_db
+      - REDIS_BROKER_URL=redis://redis:6379/0
+      - SECRET_KEY=supersecretkeyforjwtdevelopmentonly
     depends_on:
       - behemoth_db
+      - redis
     networks:
       - behemoth_network
 
@@ -30,8 +33,18 @@ services:
     networks:
       - behemoth_network
 
+  redis:
+    image: redis:7-alpine
+    expose:
+      - 6379
+    volumes:
+      - redis_volume:/data
+    networks:
+      - behemoth_network
+
 volumes:
   behemoth_volume:
+  redis_volume:
 
 
 networks:

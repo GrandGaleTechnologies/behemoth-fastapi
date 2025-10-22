@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     # REDIS
     REDIS_BROKER_URL: str = os.environ.get("REDIS_BROKER_URL")
 
+    # JWT
+    SECRET_KEY: str = os.environ.get("SECRET_KEY")
+
 
 @lru_cache
 def get_settings():

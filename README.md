@@ -10,6 +10,7 @@ Inspired by [Radoslav Georgiev's Django Structure for Scale lecture](https://you
 * [📁 Project Structure](#-project-structure)
 * [💡 Getting Started](#-getting-started)
 * [🛠️ Using auto-module.py](#️-using-auto-modulepy)
+* [🔧 Environment Variables](#-environment-variables)
 * [🔐 JWT Auth & Security](#-jwt-auth--security)
 * [🎗 License](#-license)
 * [🚀 Deploy](#-deploy)
@@ -114,7 +115,7 @@ uv venv
 
 ### 3. Environment variables
 
-Copy `.env_sample` to `.env` and set values. If provided, `LOGFIRE_TOKEN` will enable Pydantic Logfire logging. check [this](https://logfire.pydantic.dev/docs/how-to-guides/create-write-tokens/) on how to get your logfire token
+Create a `.env` file and add environment variables (use [Environment Variables](#-environment-variables) as a guide).
 
 ### 4. Initialize the database
 
@@ -165,6 +166,10 @@ uv run auto-module.py
 ```
 
 Follow the prompts to specify the module name.
+
+## 🔧 Environment Variables
+
+See configuration and instructions in [docs/ENV.md](docs/ENV.md). Use [.env_sample](.env_sample) as your template.
 
 ## 🔐 JWT Auth & Security
 
