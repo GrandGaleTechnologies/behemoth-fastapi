@@ -16,9 +16,15 @@ This guide explains what each environment variable does, what value to put, and 
   - Purpose: PostgreSQL database connection URL for the application
   - How to get: 
     - **Local Development**: `postgresql+asyncpg://postgres:password@localhost:5432/behemoth_db`
-    - **Docker Compose**: `postgresql+asyncpg://behemoth:backend@behemoth_db:5432/behemoth_db`
-    - **Production**: Get from your database provider (Railway, AWS RDS, etc.)
-    - **Format**: `postgresql+asyncpg://[user]:[password]@[host]:[port]/[database]`
+      ```bash
+      # Create user and database
+      psql -U postgres -c "CREATE USER postgres WITH PASSWORD 'password';"
+      psql -U postgres -c "CREATE DATABASE behemoth_db;"
+      psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE behemoth_db TO postgres;"
+      ```
+      - **Docker Compose**: `postgresql+asyncpg://behemoth:backend@behemoth_db:5432/behemoth_db`
+      - **Production**: Get from your database provider (Railway, AWS RDS, etc.)
+      - **Format**: `postgresql+asyncpg://[user]:[password]@[host]:[port]/[database]`
 
 ## Caching & Rate Limiting
 
@@ -84,7 +90,6 @@ environment:
 ## Tips
 
 - **Do not commit real secrets**. Use environment variables in CI/CD platforms or secret managers.
-- **For local dev**, keep `.env` in your repo root (not committed to git).
 - **Use strong passwords** for database and Redis connections in production.
 - **Rotate secrets regularly** especially in production environments.
 - **Use different values** for development, staging, and production environments.
