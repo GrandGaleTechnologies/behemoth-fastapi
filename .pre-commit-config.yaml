@@ -30,7 +30,7 @@ repos:
       - id: codespell
         additional_dependencies:
           - tomli
-        exclude: '^uv\.lock$'
+        exclude: '^uv\.lock|pyproject\.toml$'
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.18.1
