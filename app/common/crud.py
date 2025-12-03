@@ -62,9 +62,16 @@ class MongoCRUDBase(Generic[P]):
         """
         Insert a new document and return it as a model
         """
+
+        # validate data
+        data = self.model(**data)
+
+        # create entry
         result = self.collection.insert_one(data)
+
+        # fetch entry
         doc = self.collection.find_one({"_id": result.inserted_id})
-        return self.model(**doc)
+        return doc
 
     def get(self, filters) -> P | None:
         """
