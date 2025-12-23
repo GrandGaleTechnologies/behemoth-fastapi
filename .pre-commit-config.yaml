@@ -45,3 +45,11 @@ repos:
         entry: ty check
         language: system
         types: [python]
+
+  - repo: local
+    hooks:
+      - id: check-route-naming
+        name: Check FastAPI route naming convention
+        entry: python hook_scripts/check_route_names.py
+        language: python
+        types: [python]
