@@ -108,7 +108,7 @@ cd behemoth-fastapi
 #### Using `uv` (recommended)
 
 ```bash
-# Optional: add uvloop (doesnt work well on windows)
+# Optional: add uvloop (doesn't work well on windows)
 uv add uvloop
 uv venv
 ```
@@ -123,6 +123,25 @@ Create a `.env` file and add environment variables (use [Environment Variables](
 # With uv
 uv run alembic upgrade head
 ```
+
+## Alembic config & slug naming (short)
+The project uses an Alembic config that generates revision filenames from a short "slug". Use concise, structured slugs when creating revisions:
+
+Strategy: [Index]_[Action]_[Target]
+
+Example:
+```bash
+alembic revision --autogenerate -m "1_ct_users"
+```
+
+Naming cheat sheet (Action prefixes):
+- ct — Create Table (1_ct_users)
+- ac — Add Column (2_ac_email_to_users)
+- dt — Drop Table (3_dt_old_logs)
+- rc — Rename Column (4_rc_name_to_fullname)
+- ai — Add Index (5_ai_idx_user_email)
+
+Keep slugs short and use the numeric index to control ordering.
 
 ### 5. Start the application
 
@@ -342,15 +361,15 @@ docker-compose exec redis redis-cli monitor
     ```python
     # For sample_cache_manager (with SampleModel)
     await sample_cache_manager.set(
-      data={"id": 1}, 
-      value=SampleModel(id=1, name="Test"), 
+      data={"id": 1},
+      value=SampleModel(id=1, name="Test"),
       cache_prefix="sample:"
     )
 
     # For generic_cache_manager (raw dict)
     await generic_cache_manager.set(
-      data={"key": "my_data"}, 
-      value={"message": "Hello, cached world!"}, 
+      data={"key": "my_data"},
+      value={"message": "Hello, cached world!"},
       cache_prefix="generic:"
     )
     ```
@@ -364,13 +383,13 @@ docker-compose exec redis redis-cli monitor
 
     # For generic_cache_manager (will return dict or None)
     cached_generic = await generic_cache_manager.get(
-      data={"key": "my_data"}, 
+      data={"key": "my_data"},
       cache_prefix="generic:"
     )
     if cached_generic:
         print(f"Cached Generic: {cached_generic['message']}")
-    
-    
+
+
 ### Troubleshooting
 
 If Redis connection fails:
@@ -454,4 +473,3 @@ Contributions are welcome! Fork the repo, create a branch, and submit a PR. Enga
 * **LinkedIn:** [https://linkedin.com/in/angobello0](https://linkedin.com/in/angobello0)
 * **Upwork:** [https://www.upwork.com/freelancers/\~01bb1007bf8311388a](https://www.upwork.com/freelancers/~01bb1007bf8311388a)
 * **Instagram:** [https://www.instagram.com/bello\_ango0/](https://www.instagram.com/grandgale_technologies0/)
-
