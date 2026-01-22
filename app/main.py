@@ -34,6 +34,7 @@ from app.sample_module.apis import router as sample_router
 tags = RouteTags()
 settings = get_settings()
 secure_headers = Secure.with_default_headers()
+
 # constants
 REQ_RATE = 3  # Number of requests
 REQ_RATE_TIME = 1  # Number of seconds

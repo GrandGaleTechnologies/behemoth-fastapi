@@ -73,12 +73,14 @@ class MongoCRUDBase(Generic[P]):
         doc = self.collection.find_one(filters)
         return self.model(**doc) if doc else None
 
-    def update(self, id: str, data: dict) -> P | None:
+    def update(self, filters: dict, data: dict) -> P | None:
         """
         Update a document by its ID
         """
-        self.collection.update_one({"_id": ObjectId(id)}, {"$set": data})
-        updated = self.collection.find_one({"_id": ObjectId(id)})
+        res = self.collection.update_one(filters, {"$set": data})
+        if res.modified_count == 0:
+            return None
+        updated = self.collection.find_one(filters)
         return self.model(**updated) if updated else None
 
     def delete(self, id: str) -> bool:
