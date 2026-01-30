@@ -27,11 +27,11 @@ from app.core.handlers import (
     request_validation_exception_handler,
 )
 from app.core.settings import get_settings
-from app.core.tags import RouteTags
+from app.core.tags import get_tags
 from app.sample_module.apis import router as sample_router
 
 # Globals
-tags = RouteTags()
+tags = get_tags()
 settings = get_settings()
 secure_headers = Secure.with_default_headers()
 
@@ -120,7 +120,7 @@ if settings.LOGFIRE_TOKEN:
 
 # Healthcheck
 @app.get("/health", include_in_schema=False)
-async def health(_: Session = Depends(get_session)):
+async def route_healthcheck(_: Session = Depends(get_session)):
     """App Healthcheck"""
     return {"status": "Ok!"}
 
