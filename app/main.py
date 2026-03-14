@@ -94,10 +94,14 @@ app.add_middleware(
 @app.middleware("http")
 async def add_security_headers(request, call_next):
     """
-    Middle wire for adding security headers
+    Middleware for adding security headers
     """
     response = await call_next(request)
-    await secure_headers.set_headers_async(response)
+
+    # Skip security headers for docs
+    if request.url.path not in ["/", "/docs", "/openapi.json"]:
+        await secure_headers.set_headers_async(response)
+
     return response
 
 
